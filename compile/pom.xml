@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.github.hwhaocool</groupId>
+	<artifactId>lombok-nullcheck-tostring</artifactId>
+	<version>1.0</version>
+	<name>lombok-nullcheck-tostring</name>
+	<description>lombok-nullcheck-tostring</description>
+
+	<packaging>jar</packaging>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+		<maven.compiler.compilerVersion>8</maven.compiler.compilerVersion>
+		<java.version>8</java.version>
+
+		<jc.src.prefix>${project.build.outputDirectory}/unpack/lombok/javac/handlers</jc.src.prefix>
+		<jc.dst.prefix>${project.build.outputDirectory}/cls/lombok/javac/handlers</jc.dst.prefix>
+	</properties>
+		
+	
+	<dependencies>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jdk</groupId>
+			<artifactId>tools</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${java.home}/../lib/tools.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>temp</groupId>
+			<artifactId>unpack-lombok</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/unpack-lombok.jar</systemPath>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.22</version>
+							<type>jar</type>
+							<overWrite>true</overWrite>
+							<outputDirectory>${project.build.outputDirectory}/unpack</outputDirectory>
+
+							<includes>**/*.*</includes>
+						</artifactItem>
+					</artifactItems>
+				</configuration>
+			</plugin>
+
+
+			<!-- binding compile phase -->
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>rename-file</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<fileSets>
+								<fileSet>
+									<sourceFile>${project.build.outputDirectory}/lombok/javac/handlers/HandleToString.class</sourceFile>
+									<destinationFile>${project.basedir}/src/main/resources/backup/HandleToString.SCL.lombok</destinationFile>
+								</fileSet>
+								<fileSet>
+									<sourceFile>${project.build.outputDirectory}/lombok/javac/handlers/HandleToString$1.class</sourceFile>
+									<destinationFile>${project.basedir}/src/main/resources/backup/HandleToString$1.SCL.lombok</destinationFile>
+								</fileSet>
+							</fileSets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0</version>
+
+
+				<configuration>
+					<fileSets>
+						<fileSet>
+							<sourceFile>${project.build.outputDirectory}/lombok/javac/handlers/AST.SCL.lombok</sourceFile>
+							<destinationFile>${project.build.outputDirectory}/cls/lombok/core/AST.class</destinationFile>
+						</fileSet>
+						<fileSet>
+							<sourceFile>${project.build.outputDirectory}/unpack/lombok/core/AST$Kind.SCL.lombok</sourceFile>
+							<destinationFile>${project.build.outputDirectory}/cls/lombok/core/AST$Kind.class</destinationFile>
+						</fileSet>
+
+
+
+
+
+					</fileSets>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+
+					<finalName>unpack-lombok</finalName>
+
+					<classesDirectory>${project.build.outputDirectory}/unpack</classesDirectory>
+					<outputDirectory>${project.basedir}/src/main/resources/lib</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- binding package phase -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+<!--							<finalName>unpack-lombok</finalName>-->
+
+							<classesDirectory>${project.build.outputDirectory}/unpack</classesDirectory>
+							<outputDirectory>${project.basedir}/src/main/resources/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+
+				<configuration>
+
+					<finalName>unpack-lombok</finalName>
+
+					<classesDirectory>${project.build.outputDirectory}/unpack</classesDirectory>
+					<outputDirectory>${project.basedir}/src/main/resources/lib</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<!-- NOTE: We don't need a groupId specification because the group is
+                     org.apache.maven.plugins ...which is assumed by default.
+                 -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+
+
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

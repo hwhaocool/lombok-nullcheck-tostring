@@ -274,19 +274,13 @@ public class HandleToString extends JavacAnnotationHandler<ToString> {
 		return recursiveSetGeneratedBy(methodDef, source);
 	}
 
-	public static String primeForNull() {
+	/**
+	 * @return empty string
+	 */
+	private static String primeForNull() {
 		return "";
 	}
 
-//	public JCTree.JCExpressionStatement createResultCalculation(JavacNode typeNode, JCExpression expr) {
-//		/* result = result * PRIME + expr; */
-//		JavacTreeMaker maker = typeNode.getTreeMaker();
-//		Name resultName = typeNode.toName(RESULT_NAME);
-//		JCExpression mult = maker.Binary(CTC_MUL, maker.Ident(resultName), maker.Ident(typeNode.toName(PRIME_NAME)));
-//		JCExpression add = maker.Binary(CTC_PLUS, mult, expr);
-//		return maker.Exec(maker.Assign(maker.Ident(resultName), add));
-//	}
-	
 	public static String getTypeName(JavacNode typeNode) {
 		String typeName = typeNode.getName();
 		JavacNode upType = typeNode.up();

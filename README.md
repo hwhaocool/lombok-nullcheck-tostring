@@ -7,6 +7,55 @@ then modify [HandleToString](compile/src/main/java/lombok/javac/handlers/HandleT
 
 and package the classes to a new jar `lombok-nullcheck-tostring-1.18.22.jar`
 
+## feature
+here is a pojo `Tuboshu`
+```
+import lombok.ToString;
+
+import java.util.List;
+
+@ToString(doNotUseGetters=true)
+public class Tuboshu {
+
+    private String name;
+
+    private int age;
+
+    private String favorite;
+
+    private String[] array;
+
+    private List<Integer> list;
+
+}
+```
+
+after compile, class is following
+```
+import java.util.Arrays;
+import java.util.List;
+
+public class Tuboshu {
+    private String name;
+    private int age;
+    private String favorite;
+    private String[] array;
+    private List<Integer> list;
+
+    public Tuboshu() {
+    }
+
+    public String toString() {
+        String var10000 = this.name == null ? "" : ", name=" + this.name;
+        return "Tuboshu{" + var10000 + 
+          ", age=" + this.age + 
+           (this.favorite == null ? "" : ", favorite=" + this.favorite) +
+           (this.array == null ? "" : ", array=" + Arrays.deepToString(this.array)) + 
+           (this.list == null ? "" : ", list=" + this.list) + 
+          "}";
+    }
+}
+```
 
 ## 中文
 修改思路  

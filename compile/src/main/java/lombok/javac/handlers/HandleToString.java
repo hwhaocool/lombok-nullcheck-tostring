@@ -233,17 +233,16 @@ public class HandleToString extends JavacAnnotationHandler<ToString> {
 				String n = member.getInc() == null ? "" : member.getInc().name();
 				if (n.isEmpty()) n = memberNode.getName();
 
+				// add code here
 				// ", name=" + name
 				JCTree.JCBinary singleField = maker.Binary(CTC_PLUS, maker.Literal(infix + n + "="), expr);
 
 				if (fieldIsPrimitive) {
 
-					current = maker.Binary(CTC_PLUS, current, singleField);		// 拼接字符串后面的表达式
+					// 拼接字符串后面的表达式
+					current = maker.Binary(CTC_PLUS, current, singleField);
 
-//				createResultCalculation(typeNode, )
 				} else {
-					source.addWarning("hahahah enter if statement");
-
 					// null == name
 					Name dollarFieldName = memberNode.toName(memberNode.getName());
 					JCExpression thisEqualsNull = maker.Binary(CTC_EQUAL, maker.Ident(dollarFieldName), maker.Literal(CTC_BOT, null));
@@ -252,20 +251,14 @@ public class HandleToString extends JavacAnnotationHandler<ToString> {
 					JCTree.JCParens parens = maker.Parens(maker.Conditional(thisEqualsNull, maker.Literal(primeForNull()), singleField));
 
 					current = maker.Binary(CTC_PLUS, current, parens);
-
-					source.addWarning("hahahah enter if 222");
 				}
 
-
-				// (null == taskServiceName ? "" : ", taskServiceName='" + taskServiceName + '\'') +
-//				String format = String.format(filedTemplate, n, n, n);
 //				current = maker.Binary(CTC_PLUS, current, maker.Literal(infix + n + "="));
-//				current = maker.Binary(CTC_PLUS, current, maker.Literal(format));		//  拼接字符串的
 			} else {
 				current = maker.Binary(CTC_PLUS, current, maker.Literal(infix));
 			}
 
-//			current = maker.Binary(CTC_PLUS, current, expr);		// 拼接字符串后面的表达式
+//			current = maker.Binary(CTC_PLUS, current, expr);
 		}
 		
 //		if (!first)
